@@ -26,8 +26,7 @@ public class Blob {
     private static String goalPath;
 
     //无参构造方法，空
-    Blob() {
-    }
+    Blob() {}
 
     //有参构造方法，给一个文件路径构造一个以文件内容的哈希值为key，内容本身为value的新文件
     //path变量为
@@ -83,9 +82,6 @@ public class Blob {
             return stringbuffer.toString();
         }        
     }
-
-    //public static String getKey(String Value) {
-    // }
 
     public static String getType() {
         return "Blob";
