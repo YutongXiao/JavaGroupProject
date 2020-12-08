@@ -2,7 +2,7 @@ import java.io.IOException;
 
 //测试Blob类专用
 public class BlobTest {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, Exception {
         //创建文件地址path 和 目标地址goalPath 的变量，可自由改动，注：有的电脑c盘貌似写不了，可换其他盘
         String path = "D:\\JavaGroupProjectTest\\HashTest\\test1.txt";
         String goalPath = "D:\\JavaGroupProjectTest\\Blobs\\";
@@ -14,8 +14,9 @@ public class BlobTest {
         String value = test.value;
 
         //打印文件哈希值key和文件内容value（通过调用getStringValue）
-        System.out.println("key: " + key);
-        System.out.print("value: " + value);
+        System.out.println("find key by passing value to StringHash(value): " + test.StringHash(value));
+        System.out.println("find key by passing path to setFileKeyValue(path): " + test.setFileKeyValue(path));
+        System.out.println("find value by passing key to getStringValue(key): " + test.getStringValue(key));
     }
 
 }

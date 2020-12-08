@@ -17,6 +17,7 @@ Blob类，其中含有：
 5、getType()--返回“blob”，任务二判断文件类型用
 6、fileHash(path)--计算一个给定文件的哈希值
     SHA1Checksum--计算fileHash值所用算法，工具方法
+7、StringHash(value)--给value直接算哈希值，可用于任务一描述一创建文件的实现（需修改setFileKeyValue)
  */
 
 public class Blob {
@@ -26,7 +27,8 @@ public class Blob {
     private static String goalPath;
 
     //无参构造方法，空
-    Blob() {}
+    Blob() {
+    }
 
     //有参构造方法，给一个文件路径构造一个以文件内容的哈希值为key，内容本身为value的新文件
     //path变量为
@@ -79,7 +81,7 @@ public class Blob {
                 stringbuffer.append(scan.next()).append(" ");
             }
             scan.close();
-            return stringbuffer.toString();
+            return stringbuffer.toString().trim();
         }        
     }
 
@@ -98,7 +100,6 @@ public class Blob {
             for (int i = 0; i < sha1.length; i++){
                 result += Integer.toString(sha1[i]&0xFF,16);    //将其SHA1Checksum依次取出到result并加密转化为哈希值储存在变量result里
             }
-            System.out.println(path + " " + result); //打印文件哈希值
             return result;
         }
 
@@ -129,6 +130,24 @@ public class Blob {
         is.close();
         //返回SHA1哈希值
         return complete.digest();
+    }
+
+    //给定字符串value，查找得到对应的key值，用于传参value建立新文件key-value
+    public static String StringHash(String value) throws Exception{
+        //字符串value到 缓冲buffer
+        byte[] buffer = value.getBytes();
+        //使用SHA1哈希/摘要算法
+        MessageDigest complete = MessageDigest.getInstance("SHA-1");
+        complete.update(buffer);
+        //哈希值到 sha1
+        byte[] sha1 = complete.digest();
+
+        //打印哈希值
+        String result = "";
+        for (int i = 0; i < sha1.length; i++){
+            result += Integer.toString(sha1[i]&0xFF,16);    //将其SHA1Checksum依次取出到result并加密转化为哈希值储存在变量result里
+        }
+        return result;
     }
 }
 
