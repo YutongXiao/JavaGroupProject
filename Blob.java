@@ -6,7 +6,8 @@ import java.util.Scanner;
 Blob类，其中含有：
 数据域：
 1、新建文件的哈希值key
-2、新建文件的存储路径goalPath
+2、新建文件的存储内容value（同原文件内容）
+3、新建文件的存储路径goalPath
 
 方法：
 1、Blob()--无参构造函数，内容空
@@ -14,10 +15,10 @@ Blob类，其中含有：
    函数作用：构造一个哈希为key内容为value的新文件，并将参数goalPath赋值给数据变量goalPath（有的方法需要用）
 3、setFileKeyValue(path)--传入一个文件，创建一个对应key-value新文件
 4、getStringValue(key)--给定key，查找对应的value值
-5、getType()--返回“blob”，任务二判断文件类型用
+5、getType()--返回“Blob”，任务二判断文件类型用
 6、fileHash(path)--计算一个给定文件的哈希值
     SHA1Checksum--计算fileHash值所用算法，工具方法
-7、StringHash(value)--给value直接算哈希值，可用于任务一描述一创建文件的实现（需修改setFileKeyValue)
+7、StringHash(value)--传入value算哈希值，可用于任务一描述一给value，创建文件的实现（需修改setFileKeyValue方法)
  */
 
 public class Blob {
