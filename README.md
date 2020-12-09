@@ -9,6 +9,6 @@ Team members include:
 **Task 1: creation of class Blob**  
 * create a key-value info storage file for a selected file, main functions including:
 * passing in file A, generate a corresponding new file B named by A's hash while storing A's content  
-* passing in a file B's name, find its corresponding content in B
+* passing in file B's name, find its corresponding content
 
 **Task 2: creation of class Tree**
