@@ -1,9 +1,9 @@
 # JavaGroupProject: Git Storage Structure Replication
 Java group project for Java Programming Design course from Peking University second bachelor degree class 2020   
 Team members include:  
-1. @YutongXiao
-2. @brycejpt
-3. @Mingyingjie
+1. [@YutongXiao](https://github.com/YutongXiao)
+2. [@brycejpt](https://github.com/brycejpt)
+3. [@Mingyingjie](https://github.com/Mingyingjie)
 
 **Content: replication of Git blob, tree and commit storing structure**  
 **Task 1: creation of class Blob**  
