@@ -23,9 +23,9 @@ public class Blob {
 //测试方法
 public static void main(String[] args) throws Exception{
         
-        Blob blob = new Blob("E:\\局外人.txt");
+/*         Blob blob = new Blob("E:\\局外人.txt");
         System.out.print(KeyValue.getStringValue(blob.key));
-         
+          */
         
     }
 }

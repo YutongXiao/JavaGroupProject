@@ -76,6 +76,29 @@ public class KeyValue {
         
         return key;
     }
+
+        //dfs方法为每个文件、文件夹建立 key-value，
+        public static String setTreeKeyValue(String path) throws Exception{
+            String DirectoryString = "";
+            // 该字符串中存储文件夹下 files 结构
+            /*  Tree  8826db7b1c619caeb18d355f853f84d6161dbcd0	1-大数据与人工智能》讲座听后感
+                Blob  5e86e4d9f490c3fe949fbab9a77f183ff1a6f	1.jpg
+                Blob  17594c5ae3133196f9bf6d6bb63debf93c725	10月10日《素质教育与前沿技术课程》讲座现场（3303教室）报名.xlsx
+                Blob  fa96ebc2de647999e21b1f74a0351611ade87	课程考核.txt */
+            File dir = new File(path);
+            File[] fs = dir.listFiles();        
+            for(int i = 0; i < fs.length; i++){
+                if(fs[i].isFile()){                
+                    KeyValue keyvalue = new KeyValue(fs[i].getPath());  
+                    DirectoryString += "Blob" + "  " + keyvalue.key +"\t"+ fs[i].getName()+ "\n";                               
+                }    
+                if(fs[i].isDirectory()){
+                    String thisDirKey = setTreeKeyValue(fs[i].getPath());				
+                    DirectoryString += "Tree" + "  " + thisDirKey + "\t"+fs[i].getName()+ "\n" ;
+                }
+            }          
+            return KeyValue.setStringKeyValue(DirectoryString);                          
+        } 
     //
     //
     //
@@ -121,6 +144,22 @@ public class KeyValue {
 
     //工具方法：非直接调用的类
 
+    private static String fileHash(String path){
+        try{
+            File file = new File(path);    //打开指定文件
+            FileInputStream is = new FileInputStream(file);
+            byte[] sha1 = SHA1Checksum(is);     //计算指定文件的SHA1Checksum
+            //打印哈希值            
+            //System.out.println(path + " " + result); //打印文件哈希值
+            return printhash (sha1);
+        }
+
+        catch (Exception e){
+            e.printStackTrace();
+            return "Error";
+        }
+    }
+
     //valueHash 给定一个字符串，算出它的hash值
     public static String StringHash(String value) throws Exception{        
         //字符串value到 缓冲buffer
@@ -129,37 +168,20 @@ public class KeyValue {
         MessageDigest complete = MessageDigest.getInstance("SHA-1");
         complete.update(buffer);
         //哈希值到 sha1
-        byte[] sha1 = complete.digest();
-        
+        byte[] sha1 = complete.digest();       
+        //System.out.println("Hash Code of the Value is: " + result); //打印文件哈希值
+        return printhash (sha1);
+    }
+    private static String printhash (byte[] sha1){
         //打印哈希值
         String result = "";
         for (int i = 0; i < sha1.length; i++){
-            result += Integer.toString(sha1[i]&0xFF,16);    //将其SHA1Checksum依次取出到result并加密转化为哈希值储存在变量result里
-        }
-        //System.out.println("Hash Code of the Value is: " + result); //打印文件哈希值
-        return result;
-    }
-
-    //计算一个给定文件，文件内容的哈希值，用于命名目标储存文件(也就是存储中的key)
-    private static String fileHash(String path){
-        try{
-            File file = new File(path);    //打开指定文件
-            FileInputStream is = new FileInputStream(file);
-            byte[] sha1 = SHA1Checksum(is);     //计算指定文件的SHA1Checksum
-            //打印哈希值
-            String result = "";
-            for (int i = 0; i < sha1.length; i++){
                 result += Integer.toString(sha1[i]&0xFF,16);    //将其SHA1Checksum依次取出到result并加密转化为哈希值储存在变量result里
             }
-            System.out.println(path + " " + result); //打印文件哈希值
             return result;
-        }
-
-        catch (Exception e){
-            e.printStackTrace();
-            return "Error";
-        }
     }
+    //计算一个给定文件，文件内容的哈希值，用于命名目标储存文件(也就是存储中的key)
+
 
     private static byte[] SHA1Checksum(InputStream is) throws Exception{
         //用于计算hash值的文件缓冲区
