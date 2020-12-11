@@ -7,44 +7,24 @@ import java.util.Scanner;
 import java.io.FileOutputStream;
 public class KeyValue {
     String key;
-    String value;
+    //保存路径变量，需要初始化此变量，否则会产生null+哈希码的情况
+    public static String savingPath = "C:\\Users\\annay\\Desktop\\Java小组项目\\Blobs\\";
 
-    //无参构造方法，给一个文件地址构造一个以key为，内容为value的新文件
+    //无参构造方法，空
     KeyValue() {
     }
 
-    //有参构造方法，给一个文件地址构造一个以哈希为key，内容为value的新文件
+     //有参构造方法，给一个原文件地址构造一个以哈希为key，内容为value的新文件
     KeyValue(String path) throws Exception{
         key = setFileKeyValue(path);
-        value = getFileValue(key);
-
     }
-
-
-/*     //为Tree建立key Value对象
-    KeyValue(StringBuffer DirectoryInfo) throws Exception{
-        String content = value.toString();
-        value = content ;
-        key = setStringKeyValue(value);
-        
-        
-    } */
-
-    //设置目标存储文件的
-    //public static String setKey() {
-    //    return "";
-    //}
-
-    //public static String setValue() {
-    //    return "";
-    //}
 
     //给定字符串value，向存储中添加对应的key-value
     //给tree建立key-value文件所用的方法
     public static String setStringKeyValue(String value) throws Exception {
         //创建以value的hash为名的文件
         String key = StringHash(value);
-        File file = new File("E:\\KeyValues\\" + key);
+        File file = new File(savingPath + key);
         file.createNewFile();
 
         //写入value
@@ -59,7 +39,7 @@ public class KeyValue {
         //创建以文件的hash为名的文件        
         String key = fileHash(path);
         //System.out.print(key);
-        File file = new File("E:\\KeyValues\\" + key);
+        File file = new File(savingPath + key);
         file.createNewFile();
 
         //写入value        
@@ -69,50 +49,69 @@ public class KeyValue {
         byte[] buffer=new byte[1024];
         int size=0;
         while((size=fis.read(buffer))!=-1){
-            fos.write(buffer, 0, size);
+            fos.write(buffer, 0, size);           
         }
         fis.close();
-        fos.close();
-
+        fos.close(); 
+        
         return key;
     }
 
-    //dfs方法为每个文件、文件夹建立 key-value，
-    public static String setTreeKeyValue(String path) throws Exception{
-        String DirectoryString = "";
-        // 该字符串中存储文件夹下 files 结构
+        //dfs方法为每个文件、文件夹建立 key-value，
+        public static String setTreeKeyValue(String path) throws Exception{
+            String DirectoryString = "";
+            // 该字符串中存储文件夹下 files 结构， 如：
             /*  Tree  8826db7b1c619caeb18d355f853f84d6161dbcd0	1-大数据与人工智能》讲座听后感
                 Blob  5e86e4d9f490c3fe949fbab9a77f183ff1a6f	1.jpg
                 Blob  17594c5ae3133196f9bf6d6bb63debf93c725	10月10日《素质教育与前沿技术课程》讲座现场（3303教室）报名.xlsx
                 Blob  fa96ebc2de647999e21b1f74a0351611ade87	课程考核.txt */
-        File dir = new File(path);
-        File[] fs = dir.listFiles();
-        for(int i = 0; i < fs.length; i++){
-            if(fs[i].isFile()){
-                KeyValue keyvalue = new KeyValue(fs[i].getPath());
-                DirectoryString += "Blob" + "  " + keyvalue.key +"\t"+ fs[i].getName()+ "\n";
-            }
-            if(fs[i].isDirectory()){
-                String thisDirKey = setTreeKeyValue(fs[i].getPath());
-                DirectoryString += "Tree" + "  " + thisDirKey + "\t"+fs[i].getName()+ "\n" ;
-            }
-        }
-        return KeyValue.setStringKeyValue(DirectoryString);
-    }
+            File dir = new File(path);
+            File[] fs = dir.listFiles();        
+            for(int i = 0; i < fs.length; i++){
+                if(fs[i].isFile()){                
+                    KeyValue keyvalue = new KeyValue(fs[i].getPath());  
+                    DirectoryString += "100644 Blob" + "  " + keyvalue.key +"\t"+ fs[i].getName()+ "\n";
+                }    
+                if(fs[i].isDirectory()){
+                    String thisDirKey = setTreeKeyValue(fs[i].getPath());				
+                    DirectoryString += "040000 Tree" + "  " + thisDirKey + "\t"+fs[i].getName()+ "\n" ;
+                }
+            }          
+            return KeyValue.setStringKeyValue(DirectoryString);                          
+        } 
     //
     //
     //
     //给定文件key，查找得到对应的value值
-    public static String getFileValue(String key)throws Exception{
-        File file = new File("E:\\KeyValues\\" + key);
+    public static String getBlobFileValue(String key)throws Exception{
+        File file = new File(savingPath + key);
         if(!file.exists()){
-            System.out.println("File with this key doesnt exists");
+            System.out.println("File with this key doesn't exists");
             return null;
         }else{
             Scanner scan = new Scanner(file);
             StringBuffer stringbuffer = new StringBuffer();
             while (scan.hasNext()){
-                stringbuffer.append(scan.next()).append("\n");
+                stringbuffer.append(scan.next()).append(" ");
+            }
+            scan.close();
+            return stringbuffer.toString().trim();
+        }        
+    }
+
+    public static String getTreeFileValue(String key)throws Exception{
+        File file = new File(savingPath + key);
+        if(!file.exists()){
+            System.out.println("File with this key doesn't exists");
+            return null;
+        }else{
+            Scanner scan = new Scanner(file);
+            StringBuffer stringbuffer = new StringBuffer();
+            while (scan.hasNext()){
+                for(int i=0; i<4; i++) { //每遍历完一条记录的文件权限信息、文件类型、文件哈希、文件名四个部分后，换行
+                    stringbuffer.append(scan.next()).append(" ");
+                }
+                stringbuffer.append("\n"); //每打印完一条三部分记录后换行
             }
             scan.close();
             return stringbuffer.toString();
@@ -121,7 +120,7 @@ public class KeyValue {
 
     //给定字符串key，查找得到对应的value值
     public static String getStringValue(String key) throws Exception{
-        File file = new File("E:\\KeyValues\\" + key);
+        File file = new File(savingPath + key);
         if(!file.exists()){
             System.out.println("File with this key doesnt exists");
             return null;
@@ -133,25 +132,16 @@ public class KeyValue {
             }
             scan.close();
             return stringbuffer.toString();
-        }
+        }        
     }
 
-    // public static String getKey(String Value) {
-    // }
-
-
-
-
     //工具方法：非直接调用的类
-
     private static String fileHash(String path){
         try{
             File file = new File(path);    //打开指定文件
             FileInputStream is = new FileInputStream(file);
             byte[] sha1 = SHA1Checksum(is);     //计算指定文件的SHA1Checksum
-            //打印哈希值            
-            //System.out.println(path + " " + result); //打印文件哈希值
-            return printhash (sha1);
+            return printHash (sha1);
         }
 
         catch (Exception e){
@@ -161,34 +151,42 @@ public class KeyValue {
     }
 
     //valueHash 给定一个字符串，算出它的hash值
-    public static String StringHash(String value) throws Exception{
+    public static String StringHash(String value) throws Exception{        
         //字符串value到 缓冲buffer
         byte[] buffer = value.getBytes();
         //使用SHA1哈希/摘要算法
         MessageDigest complete = MessageDigest.getInstance("SHA-1");
         complete.update(buffer);
         //哈希值到 sha1
-        byte[] sha1 = complete.digest();
+        byte[] sha1 = complete.digest();       
         //System.out.println("Hash Code of the Value is: " + result); //打印文件哈希值
-        return printhash (sha1);
+        return printHash (sha1);
     }
-    private static String printhash (byte[] sha1){
+    private static String printHash (byte[] sha1){
         //打印哈希值
         String result = "";
-        int n = sha1.length;
-        for (int i = 0; i < n; i++){
-            String append = Integer.toString(sha1[i] & 0xFF, 16);
+        /*
+        //使用&0x0F和&0xF0来计算
+        for (int i = 0; i < sha1.length; i++){
+                //将其SHA1Checksum依次取出到result并加密转化为哈希值储存在变量result里
+                result+=Integer.toString((sha1[i]>>4)&0x0F,16)+ Integer.toString(sha1[i]&0x0F,16);
+            }
+         */
+
+        //判断生成的两位字符是否小于两位再补0
+        for(int i = 0; i<sha1.length; i++){
+            String append = Integer.toString(sha1[i]&0xFF, 16);
             if (append.length() < 2){
-                result += "0" + append;
-            }else{
+                result = result + "0" + append;
+            }
+            else{
                 result += append;
             }
         }
-        return result;
+            return result;
     }
+
     //计算一个给定文件，文件内容的哈希值，用于命名目标储存文件(也就是存储中的key)
-
-
     private static byte[] SHA1Checksum(InputStream is) throws Exception{
         //用于计算hash值的文件缓冲区
         byte[] buffer = new byte[1024];
@@ -210,13 +208,11 @@ public class KeyValue {
         //返回SHA1哈希值
         return complete.digest();
     }
-    //测试方法
-    public static void main(String[] args) throws Exception{
-        
-/*         Blob blob = new Blob();
-        System.out.print(blob.getStringValue("57b22291db30c440217479b23801561cace9ef"));
- */
 
+//测试方法
+public static void main(String[] args) throws Exception{
+        //Blob blob = new Blob();
+        //System.out.print(blob.getStringValue("57b22291db30c440217479b23801561cace9ef"));
     }
 }
 
