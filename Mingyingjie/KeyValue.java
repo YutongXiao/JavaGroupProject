@@ -13,11 +13,11 @@ public class KeyValue {
     KeyValue() {
     }
 
-     //有参构造方法，给一个文件地址构造一个以哈希为key，内容为value的新文件
+    //有参构造方法，给一个文件地址构造一个以哈希为key，内容为value的新文件
     KeyValue(String path) throws Exception{
         key = setFileKeyValue(path);
         value = getFileValue(key);
-       
+
     }
 
 
@@ -69,36 +69,36 @@ public class KeyValue {
         byte[] buffer=new byte[1024];
         int size=0;
         while((size=fis.read(buffer))!=-1){
-            fos.write(buffer, 0, size);           
+            fos.write(buffer, 0, size);
         }
         fis.close();
-        fos.close(); 
-        
+        fos.close();
+
         return key;
     }
 
-        //dfs方法为每个文件、文件夹建立 key-value，
-        public static String setTreeKeyValue(String path) throws Exception{
-            String DirectoryString = "";
-            // 该字符串中存储文件夹下 files 结构
+    //dfs方法为每个文件、文件夹建立 key-value，
+    public static String setTreeKeyValue(String path) throws Exception{
+        String DirectoryString = "";
+        // 该字符串中存储文件夹下 files 结构
             /*  Tree  8826db7b1c619caeb18d355f853f84d6161dbcd0	1-大数据与人工智能》讲座听后感
                 Blob  5e86e4d9f490c3fe949fbab9a77f183ff1a6f	1.jpg
                 Blob  17594c5ae3133196f9bf6d6bb63debf93c725	10月10日《素质教育与前沿技术课程》讲座现场（3303教室）报名.xlsx
                 Blob  fa96ebc2de647999e21b1f74a0351611ade87	课程考核.txt */
-            File dir = new File(path);
-            File[] fs = dir.listFiles();        
-            for(int i = 0; i < fs.length; i++){
-                if(fs[i].isFile()){                
-                    KeyValue keyvalue = new KeyValue(fs[i].getPath());  
-                    DirectoryString += "Blob" + "  " + keyvalue.key +"\t"+ fs[i].getName()+ "\n";                               
-                }    
-                if(fs[i].isDirectory()){
-                    String thisDirKey = setTreeKeyValue(fs[i].getPath());				
-                    DirectoryString += "Tree" + "  " + thisDirKey + "\t"+fs[i].getName()+ "\n" ;
-                }
-            }          
-            return KeyValue.setStringKeyValue(DirectoryString);                          
-        } 
+        File dir = new File(path);
+        File[] fs = dir.listFiles();
+        for(int i = 0; i < fs.length; i++){
+            if(fs[i].isFile()){
+                KeyValue keyvalue = new KeyValue(fs[i].getPath());
+                DirectoryString += "Blob" + "  " + keyvalue.key +"\t"+ fs[i].getName()+ "\n";
+            }
+            if(fs[i].isDirectory()){
+                String thisDirKey = setTreeKeyValue(fs[i].getPath());
+                DirectoryString += "Tree" + "  " + thisDirKey + "\t"+fs[i].getName()+ "\n" ;
+            }
+        }
+        return KeyValue.setStringKeyValue(DirectoryString);
+    }
     //
     //
     //
@@ -116,7 +116,7 @@ public class KeyValue {
             }
             scan.close();
             return stringbuffer.toString();
-        }        
+        }
     }
 
     //给定字符串key，查找得到对应的value值
@@ -133,13 +133,13 @@ public class KeyValue {
             }
             scan.close();
             return stringbuffer.toString();
-        }        
+        }
     }
 
-   // public static String getKey(String Value) {
+    // public static String getKey(String Value) {
     // }
 
-    
+
 
 
     //工具方法：非直接调用的类
@@ -161,14 +161,14 @@ public class KeyValue {
     }
 
     //valueHash 给定一个字符串，算出它的hash值
-    public static String StringHash(String value) throws Exception{        
+    public static String StringHash(String value) throws Exception{
         //字符串value到 缓冲buffer
         byte[] buffer = value.getBytes();
         //使用SHA1哈希/摘要算法
         MessageDigest complete = MessageDigest.getInstance("SHA-1");
         complete.update(buffer);
         //哈希值到 sha1
-        byte[] sha1 = complete.digest();       
+        byte[] sha1 = complete.digest();
         //System.out.println("Hash Code of the Value is: " + result); //打印文件哈希值
         return printhash (sha1);
     }
@@ -210,13 +210,13 @@ public class KeyValue {
         //返回SHA1哈希值
         return complete.digest();
     }
-//测试方法
-public static void main(String[] args) throws Exception{
+    //测试方法
+    public static void main(String[] args) throws Exception{
         
 /*         Blob blob = new Blob();
         System.out.print(blob.getStringValue("57b22291db30c440217479b23801561cace9ef"));
- */        
-        
+ */
+
     }
 }
 
