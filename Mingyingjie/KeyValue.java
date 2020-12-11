@@ -175,10 +175,16 @@ public class KeyValue {
     private static String printhash (byte[] sha1){
         //打印哈希值
         String result = "";
-        for (int i = 0; i < sha1.length; i++){
-                result += Integer.toString(sha1[i]&0xFF,16);    //将其SHA1Checksum依次取出到result并加密转化为哈希值储存在变量result里
+        int n = sha1.length;
+        for (int i = 0; i < n; i++){
+            String append = Integer.toString(sha1[i] & 0xFF, 16);
+            if (append.length() < 2){
+                result += "0" + append;
+            }else{
+                result += append;
             }
-            return result;
+        }
+        return result;
     }
     //计算一个给定文件，文件内容的哈希值，用于命名目标储存文件(也就是存储中的key)
 
