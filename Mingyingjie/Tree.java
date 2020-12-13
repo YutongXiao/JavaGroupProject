@@ -14,6 +14,7 @@ public class Tree {
         key = KeyValue.setTreeKeyValue(path);
         value = KeyValue.getFileValue(key);
         type = "Tree";
+        
     }
 
 
@@ -21,8 +22,8 @@ public class Tree {
     //测试方法
     public static void main (String[] args) throws Exception{
          
-        Tree tree = new Tree("E:\\素质教育");       
+        /* Tree tree = new Tree("E:\\素质教育");       
         System.out.print(tree.value);
-        System.out.print("Root: " + tree.key);  
+        System.out.print("Root: " + tree.key);  */ 
     }
 }
