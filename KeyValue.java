@@ -19,6 +19,7 @@ public class KeyValue {
         key = setFileKeyValue(path);
     }
 
+    //---------------------------------------------------------------------------------------------------------
     //给定字符串value，向存储中添加对应的key-value
     //给tree建立key-value文件所用的方法
     public static String setStringKeyValue(String value) throws Exception {
@@ -79,9 +80,17 @@ public class KeyValue {
             }          
             return KeyValue.setStringKeyValue(DirectoryString);                          
         } 
-    //
-    //
-    //
+
+    public static String setCommitKeyValue(String path) throws Exception{
+        String CommitString = "";
+        CommitString += "Tree" + " " + setTreeKeyValue(path) + "\n"; //加根目录类型和哈希
+        CommitString += "Parent " + " " + HEAD.getCurCommit();
+
+        return KeyValue.setStringKeyValue(CommitString);
+    }
+
+    //------------------------------------------------------------------------------------------------------
+
     //给定文件key，查找得到对应的value值
     public static String getBlobFileValue(String key)throws Exception{
         File file = new File(savingPath + key);
@@ -99,7 +108,7 @@ public class KeyValue {
         }        
     }
 
-    public static String getTreeFileValue(String key)throws Exception{
+    public static String getTreeFileValue(String key) throws Exception{
         File file = new File(savingPath + key);
         if(!file.exists()){
             System.out.println("File with this key doesn't exists");
@@ -118,24 +127,41 @@ public class KeyValue {
         }
     }
 
-    //给定字符串key，查找得到对应的value值
-    public static String getStringValue(String key) throws Exception{
+    public static String getCommitFileValue(String key) throws Exception{
         File file = new File(savingPath + key);
-        if(!file.exists()){
-            System.out.println("File with this key doesnt exists");
+        if(!file.exists()) {
+            System.out.println("File with this key doesn't exists");
             return null;
-        }else{
+        }
+        else {
             Scanner scan = new Scanner(file);
             StringBuffer stringbuffer = new StringBuffer();
-            while (scan.hasNext()){
-                stringbuffer.append(scan.next()).append("\n");
-            }
+            //读取根目录类型，哈希，换行，读取上一个commit类型，哈希
+            stringbuffer.append(scan.next()).append(" ").append(scan.next()).append("\n");
+            stringbuffer.append(scan.next()).append(" ").append(scan.next());
             scan.close();
             return stringbuffer.toString();
-        }        
+        }
     }
 
-    //工具方法：非直接调用的类
+    //-----------------------------------------------------------------------------------------------------
+
+    //对比传入路径的根目录和HEAD指向当前commit的根目录哈希是否相等
+    public static void compareRoots(String path) throws Exception{
+        //相等返回相等信息
+        String pathRoot = setTreeKeyValue(path);
+        String curRoot = HEAD.getCurRoot();
+        //if (setTreeKeyValue(path) == HEAD.getCurRoot()){
+        if (pathRoot.equals(curRoot)){
+            System.out.println("HEAD is at newest commit " + HEAD.getCurCommit());
+        }
+        //不等创建新的commit
+        else{ Commit commit = new Commit(path); }
+    }
+
+    //----------------------------------------------------------------------------------------------
+
+    //工具方法：非直接调用的方法
     private static String fileHash(String path){
         try{
             File file = new File(path);    //打开指定文件
@@ -209,6 +235,7 @@ public class KeyValue {
         return complete.digest();
     }
 
+    
 //测试方法
 public static void main(String[] args) throws Exception{
         //Blob blob = new Blob();
