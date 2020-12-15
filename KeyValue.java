@@ -8,7 +8,7 @@ import java.io.FileOutputStream;
 public class KeyValue {
     String key;
     //保存路径变量，需要初始化此变量，否则会产生null+哈希码的情况
-    public static String savingPath = "C:\\Users\\annay\\Desktop\\Java小组项目\\Blobs\\";
+    public static String savingPath = "/Users/jiapeitong/Desktop/未命名文件夹 2/";
 
     //无参构造方法，空
     KeyValue() {
@@ -18,8 +18,17 @@ public class KeyValue {
     KeyValue(String path) throws Exception{
         key = setFileKeyValue(path);
     }
+    
+    public static void checksavingpath(String path){
+        File file = new File(path+File.separator+".git"); 
+            if (!file.exists()) { 
+                file.mkdirs(); 
+            } 
+        
+        KeyValue.savingPath=file.getPath()+File.separator;
+    }
 
-    //---------------------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------------------
     //给定字符串value，向存储中添加对应的key-value
     //给tree建立key-value文件所用的方法
     public static String setStringKeyValue(String value) throws Exception {
@@ -58,108 +67,9 @@ public class KeyValue {
         return key;
     }
 
-        //dfs方法为每个文件、文件夹建立 key-value，
-        public static String setTreeKeyValue(String path) throws Exception{
-            String DirectoryString = "";
-            // 该字符串中存储文件夹下 files 结构， 如：
-            /*  Tree  8826db7b1c619caeb18d355f853f84d6161dbcd0	1-大数据与人工智能》讲座听后感
-                Blob  5e86e4d9f490c3fe949fbab9a77f183ff1a6f	1.jpg
-                Blob  17594c5ae3133196f9bf6d6bb63debf93c725	10月10日《素质教育与前沿技术课程》讲座现场（3303教室）报名.xlsx
-                Blob  fa96ebc2de647999e21b1f74a0351611ade87	课程考核.txt */
-            File dir = new File(path);
-            File[] fs = dir.listFiles();        
-            for(int i = 0; i < fs.length; i++){
-                if(fs[i].isFile()){                
-                    KeyValue keyvalue = new KeyValue(fs[i].getPath());  
-                    DirectoryString += "100644 Blob" + "  " + keyvalue.key +"\t"+ fs[i].getName()+ "\n";
-                }    
-                if(fs[i].isDirectory()){
-                    String thisDirKey = setTreeKeyValue(fs[i].getPath());				
-                    DirectoryString += "040000 Tree" + "  " + thisDirKey + "\t"+fs[i].getName()+ "\n" ;
-                }
-            }          
-            return KeyValue.setStringKeyValue(DirectoryString);                          
-        } 
+        
 
-    public static String setCommitKeyValue(String path) throws Exception{
-        String CommitString = "";
-        CommitString += "Tree" + " " + setTreeKeyValue(path) + "\n"; //加根目录类型和哈希
-        CommitString += "Parent " + " " + HEAD.getCurCommit();
-
-        return KeyValue.setStringKeyValue(CommitString);
-    }
-
-    //------------------------------------------------------------------------------------------------------
-
-    //给定文件key，查找得到对应的value值
-    public static String getBlobFileValue(String key)throws Exception{
-        File file = new File(savingPath + key);
-        if(!file.exists()){
-            System.out.println("File with this key doesn't exists");
-            return null;
-        }else{
-            Scanner scan = new Scanner(file);
-            StringBuffer stringbuffer = new StringBuffer();
-            while (scan.hasNext()){
-                stringbuffer.append(scan.next()).append(" ");
-            }
-            scan.close();
-            return stringbuffer.toString().trim();
-        }        
-    }
-
-    public static String getTreeFileValue(String key) throws Exception{
-        File file = new File(savingPath + key);
-        if(!file.exists()){
-            System.out.println("File with this key doesn't exists");
-            return null;
-        }else{
-            Scanner scan = new Scanner(file);
-            StringBuffer stringbuffer = new StringBuffer();
-            while (scan.hasNext()){
-                for(int i=0; i<4; i++) { //每遍历完一条记录的文件权限信息、文件类型、文件哈希、文件名四个部分后，换行
-                    stringbuffer.append(scan.next()).append(" ");
-                }
-                stringbuffer.append("\n"); //每打印完一条三部分记录后换行
-            }
-            scan.close();
-            return stringbuffer.toString();
-        }
-    }
-
-    public static String getCommitFileValue(String key) throws Exception{
-        File file = new File(savingPath + key);
-        if(!file.exists()) {
-            System.out.println("File with this key doesn't exists");
-            return null;
-        }
-        else {
-            Scanner scan = new Scanner(file);
-            StringBuffer stringbuffer = new StringBuffer();
-            //读取根目录类型，哈希，换行，读取上一个commit类型，哈希
-            stringbuffer.append(scan.next()).append(" ").append(scan.next()).append("\n");
-            stringbuffer.append(scan.next()).append(" ").append(scan.next());
-            scan.close();
-            return stringbuffer.toString();
-        }
-    }
-
-    //-----------------------------------------------------------------------------------------------------
-
-    //对比传入路径的根目录和HEAD指向当前commit的根目录哈希是否相等
-    public static void compareRoots(String path) throws Exception{
-        //相等返回相等信息
-        String pathRoot = setTreeKeyValue(path);
-        String curRoot = HEAD.getCurRoot();
-        //if (setTreeKeyValue(path) == HEAD.getCurRoot()){
-        if (pathRoot.equals(curRoot)){
-            System.out.println("HEAD is at newest commit " + HEAD.getCurCommit());
-        }
-        //不等创建新的commit
-        else{ Commit commit = new Commit(path); }
-    }
-
-    //----------------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------------
 
     //工具方法：非直接调用的方法
     private static String fileHash(String path){
@@ -242,4 +152,5 @@ public static void main(String[] args) throws Exception{
         //System.out.print(blob.getStringValue("57b22291db30c440217479b23801561cace9ef"));
     }
 }
+
 

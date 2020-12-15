@@ -28,7 +28,7 @@ public class HEAD {
             return "null";
         }
         else{
-            return KeyValue.getBlobFileValue("HEAD");
+            return Blob.getBlobFileValue("HEAD");
         }
     }
 
@@ -41,7 +41,7 @@ public class HEAD {
         //若HEAD存在则提取出HEAD中当前commit所建key-value文件中的根目录哈希（根目录信息部分如"Tree ad910b66c06991ddcfd2ce3f294eb9d130f5add8"）
         //并返回其哈希部分的值
         else{
-            String value = KeyValue.getCommitFileValue(getCurCommit());
+            String value = Commit.getCommitFileValue(getCurCommit());
             return value.substring(value.indexOf("Tree") + 5, value.indexOf("Tree") + 45);
         }
     }
@@ -56,3 +56,4 @@ public class HEAD {
         else{return true;}
     }
 }
+
