@@ -1,0 +1,22 @@
+Branch类：
+数据域：
+-String Name：分支名
+-String commit：当前指向commit的哈希
+
+方法：
+-构造方法：Branch(String Name):
+生成名为Name的文件，获取当前分支指向commit写入文件
+
+-getBranchName()：返回当前分支名
+-updateBranch(String commit):更新Branch文件中储存的commit的哈希值
+-getBranchCommit():返回当前Branch储存的commit的哈希值
+-resetCommit():在当前分支回滚，Branch指向前一个Commit，并恢复文件
+
+------
+Commit类添加的方法：
+-getCommitparent():返回commit的parent
+-resetFile():将commit中储存的根目录的Tree恢复成文件夹
+
+------
+HEAD类添加的方法：
+-checkoutBranch():切换分支，HEAD储存当前分支名
