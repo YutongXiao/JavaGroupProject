@@ -1,5 +1,6 @@
 import java.io.File;
-import java.io.PrintWriter;import java.io.*;
+import java.io.PrintWriter;
+import java.io.*;
 import java.util.Scanner;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -14,9 +15,9 @@ public class Logs {
     public static String repository = Branch.repository;
 
     //logs构造方法
-    //判断logs文件是否存在，若不存在，创建以HEAD为名，Commit哈希为内容的文件，若存在,更新HEAD。
+    //判断logs文件是否存在，若不存在，创建logs文件。
     Logs(String path) throws Exception{
-        //不存在则创造HEAD，放入commit哈希
+        //不存在则创造logs
         File file = new File(path + "logs");
         if (!file.exists()){
             file.createNewFile();
