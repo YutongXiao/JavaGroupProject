@@ -9,4 +9,4 @@ Group members include:
 Task 1: creation of class Blob and class KeyValue  
 Task 2: creation of class Tree  
 Task 3: creation of class Commit and class HEAD  
-Task 4: creation of class Branch and the tool's interaction in command line
+Task 4: creation of class Branch, Logs, SetTree and CommandLine
