@@ -1,7 +1,7 @@
 /*
 CommandLine类主要实现从命令行编译Java文件后的交互 通过java+命令语句实现
 主要方法有：
-git commit "description" / git branch xxx /git reset xxx
+git commit "description" / git checkout xxx /git reset xxx
 新加commit、切换分支及分支内回滚的功能
  */
 
@@ -52,7 +52,7 @@ public class CommandLine {
         Commit.compareRoots("C:\\Users\\annay\\Desktop\\Java小组项目\\HashTest\\");
     }
 
-    //用git checkout “branchName”切换到branchName的分支
+    //用git checkout "branchName"切换到branchName的分支
     public static void gitCheckout(String branchName) throws Exception {
         Branch.checkoutBranch(branchName);
     }
