@@ -1,0 +1,25 @@
+任务一：文件哈希的实现
+包括KeyValue类和Blob类
+KeyValue类
+数据域：
+1.	key：用于储存传入路径计算出的哈希值
+2.	savingPath：保存键值对文件的路径
+
+方法：
+1.	KeyValue(String Path)：有参构造方法，给一个原文件地址构造一个以哈希为key，内容为value的新文件
+2.	setStringKeyValue(String value)：给定字符串value，添加对应的key-value。为给目录建立key-value文件所用方法
+3.	setFileKeyValue(String path)：给定文件路径，向内存中添加对应的key-value文件。 
+4.	StringHash(String value)：给定一个字符串，算出它的哈希值
+5.	fileHash(String path)：工具方法，打开指定文件，计算文件内容的SHA1Checksum，并返回其哈希打印值，调用同类中SHA1Checksum方法和printHash方法
+6.	printHash(byte[] sha1)：工具方法，打印一个byte数组的哈希值
+7.	SHA1Checksum(InputStream is)：计算一个给定文件内容的SHA1哈希值
+
+
+Blob类
+数据域：
+1.	key：Blob的文件名key
+2.	value：Blob的文件内容value
+
+方法：
+1.	Blob(String path)：有参构造方法，给一个文件地址构造一个以哈希为key，内容为value的新文件，调用KeyValue类中的KeyValue.setFileKeyValue(path)方法。
+2.	getBlobFileValue(String key)：给定文件key，查找得到对应的value值

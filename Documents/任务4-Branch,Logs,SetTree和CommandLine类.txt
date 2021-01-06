@@ -1,0 +1,60 @@
+任务四：分支、回滚以及命令行的实现
+包括Branch类、Logs类、SetTree类和CommandLine类
+Branch类：
+数据域：
+1、String Name：分支名
+2、String commit：当前指向commit的哈希
+方法：
+1、构造方法：Branch(String Name):
+生成名为Name的文件，获取当前分支指向commit写入文件
+2、getBranchName()：返回当前分支名
+3、updateBranch(String branch,String commit):更新branch文件中储存的commit的哈希值
+4、getBranchCommit():返回当前Branch储存的commit的哈希值
+5、resetBranch():在当前分支回滚，Branch指向前一个Commit，并恢复文件
+6、BranchExists(String name):判断名为name的分支是否存在
+7、getBranchCommit(String branch)：返回某一分支储存commit
+8、getCurCommit()：返回当前HEAD指向commit
+9、checkoutBranch():切换分支，HEAD储存当前分支名
+
+Logs类：
+数据域：
+1、savingPath：logs文件储存地址
+2、repository：重建文件夹地址;
+方法：
+1、Logs()：logs构造方法
+2、Writelogs(String commit,String branch) :保存每次commit哈希及所在分支
+3、Checklogs()：打印全部logs
+4、CheckoutCommit(String commit)：根据打印出来的commit历史，复制其中一个commit，切换到该commit，并同时切换到该commit所在分支
+
+
+
+SetTree类：
+
+
+
+
+
+
+CommandLine类：
+在命令行中：
+1、首先输入javac CommandLine.java实现对CommandLine文件的编译
+2、	输入java CommandLine XXX 通过main函数参数String[] args 实现命令交互
+3、	XXX主要为三个命令
+	git commit "description" 解析args[0]是否为git arg[1]为commit则调用gitCommit(args[2])
+	git checkout branchname 解析args[0]是否为git arg[1]为checkout则调用gitCheckout(args[2])
+	git reset 哈希码 解析args[0]是否为git arg[1]为reset则调用gitReset(args[2])
+
+方法：
+1、main(String[] args)：读取用户在命令行的输入
+	判断长度 可接受长度为3或2
+	分段取词，第一词为git继续读取，非git输出“非法输入”
+	按第二词调用函数,并将第三词（若有）作为参数传入
+
+2、gitCommit(String description)：将当前HEAD指向branch并更新一个Commit，调用commit中compareRoot方法，description参数暂时无用。
+
+3、gitCheckout(String branchName)：运用HEAD类中checkoutBranch()方法，在branch文件中找到为参数名的branch，并将HEAD指向它。若无此branch则以参数名为名新建一个branch对象，更新HEAD指针到此对象，返回“At branchName”
+
+4、gitReset(String hash)：用户输入5-40位的特定commit哈希码，系统通过回滚方法resetCommit()恢复指定commit的文件内容，返回“At 'commit hash'”
+
+5、gitLog()：返回所有的commit历史或当前分支commit历史，每个commit包括哈希+commit分支
+
