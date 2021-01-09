@@ -11,8 +11,8 @@ import java.io.InputStreamReader;
 
 
 public class Logs {
-    public static String savingPath = KeyValue.savingPath;
-    public static String repository = Branch.repository;
+    public static String savingPath = KeyValue.savingPath; //logs文件储存地址
+    public static String repository = Branch.repository; //重建文件夹地址;
 
     //logs构造方法
     //判断logs文件是否存在，若不存在，创建logs文件。
@@ -52,6 +52,7 @@ public class Logs {
     public static void CheckoutCommit(String commit) throws Exception{
         File file = new File(savingPath + "logs");
         String line = "";
+        String commitComplete = "";
         if(!file.exists()){
             System.out.println("Commit with this key doesn't exists");
         }
@@ -61,11 +62,12 @@ public class Logs {
             
             for (line = br.readLine(); !line.startsWith(commit); line = br.readLine()) {
             }
-            
+            commitComplete = line.substring(0, 40);
         }
-        String branch = line.substring(line.indexOf(commit + "commitby:")+51);
+        System.out.println(commitComplete);
+        String branch = line.substring(line.indexOf(commitComplete + "commitby:")+51);
         Branch.checkoutBranch(branch);
-        SetTree.ResetCommit(repository,commit);
-        System.out.println("successfully reset to commit " + commit + " at branch " + branch);
+        SetTree.ResetCommit(repository,commitComplete);
+        System.out.println("successfully reset to commit " + commitComplete + " at branch " + branch);
     }
 }

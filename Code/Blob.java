@@ -2,8 +2,8 @@ import java.io.File;
 import java.util.Scanner;
 
 public class Blob {
-    String key;
-    String value;
+    String key; //Blob的文件名key
+    String value; //Blob的文件内容value
 
     //无参构造方法，空
     Blob() {
@@ -30,13 +30,6 @@ public class Blob {
             scan.close();
             return stringbuffer.toString().trim();
         }        
-    }
-   
-//测试方法
-public static void main(String[] args) throws Exception{
-        Blob blob = new Blob("C:\\Users\\annay\\Desktop\\Java小组项目\\HashTest\\test1.txt");
-        System.out.println(blob.key);
-        System.out.print(getBlobFileValue(blob.key));
     }
 }
 

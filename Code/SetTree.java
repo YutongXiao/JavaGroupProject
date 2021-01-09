@@ -7,7 +7,7 @@ import java.io.FileOutputStream;
 
 
 public class SetTree {
-    public static String savingPath = KeyValue.savingPath;
+    public static String savingPath = KeyValue.savingPath; //所有键值对文件存放的路径
     
     //从commit中提取tree
     static String CommitGetTree(String commit) throws Exception{
@@ -33,7 +33,7 @@ public class SetTree {
         return TreeContent;
     }
 
-    //写blob文件
+    //通过原文件名、写入路径和文件对应键值文件写回文件。
     static Boolean WriteBlob(String FileName,String Mother,String FileKey)throws Exception{
         File file = new File(Mother +File.separator+ FileName);
         file.createNewFile();
@@ -51,7 +51,7 @@ public class SetTree {
         return true;    
     }
 
-    //写tree文件夹
+    //通过原文件名、写入路径和文件对应键值文件写回文件夹。
     static Boolean WriteTree(String Mother, ArrayList<String> TreeContent)throws Exception{		
 		// 对ArrayList中存储的字符串进行处理
 		int length = TreeContent.size();	
@@ -69,29 +69,10 @@ public class SetTree {
         }
         return true;
     }
-    
+
+    //传入路径和commit，调用上述的方法重写Commit到路径。
     static Boolean ResetCommit(String Mother,String commit) throws Exception{
         String tree = CommitGetTree(commit);
         return WriteTree(Mother, TreeGetContent(tree));
     }
-
-//    public static void main (String[] args) throws Exception{
-//
-////TreeGetContent 方法测试
-///*          ArrayList<String> array = TreeGetContent("727506b10211bbfc0bd4aeaba36467b1f2cbbdd5") ;
-//		for (int i = 0; i < array.size(); i++) {
-//            System.out.println("next blob:");
-//            String[] arrayIn = array.get(i).split("\t");
-//            for (int j =0;j<3;j++){
-//                System.out.println(arrayIn[j]+" ");
-//            }
-//        }  */
-//
-//// WriteBlob 方法测试
-////        System.out.print(WriteBlob("1.jpg","E:\\desktop\\NewBase\\素质教育","5e86e4d9f490c3fe0949fb0ab90a77f183ff1a6f"));
-//
-////WriteTree 方法测试
-//        //WriteTree("/Users/jiapeitong/Desktop/未命名文件夹4/",TreeGetContent("ee6e9c92dbbdd1501dc525a5016aefbbc0ef4ecd"));
-//        ResetCommit("/Users/jiapeitong/Desktop/未命名文件夹4/", "5c43dc9bfdf9840761df29987c0465de2ea8cea8");
-//    }
 }

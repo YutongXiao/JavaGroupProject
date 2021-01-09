@@ -6,29 +6,25 @@ import java.util.Scanner;
 public class Branch {
     String name; //分支名
     public static String savingPath = KeyValue.savingPath;
-    public static String repository = "C:\\Users\\annay\\Desktop\\Java小组项目\\SetTree\\";
+    public static String repository = "请将此变量修改为回滚生成文件的保存路径";
 
-    //HEAD构造方法，传入一个commit的哈希值
-    //判断HEAD文件是否存在，若不存在，创建以HEAD为名，Commit哈希为内容的文件，若存在,更新HEAD。
+    //生成名为name的文件，获取当前分支指向commit写入文件
     Branch(String branch) throws Exception{
-        //不存在则创造HEAD，放入commit哈希
         name = branch;
         File file = new File(savingPath + branch);
         if (!BranchExists(branch)){
             file.createNewFile();
             System.out.println("new branch \"" + branch + "\" created");
         }
-        //存在则打开HEAD，更新commit哈希
         else{
             System.out.println("The Branch "+branch+" already exists.");
         }
     };
     
-    //切换分支
+    //切换分支，HEAD储存当前分支名
     public static void checkoutBranch(String branch) throws Exception{
         if (!BranchExists(branch)){
-            Branch newBranch = new Branch(branch);
-            checkoutBranch(branch);
+            System.out.println("Branch doesn't exist.");
         }
         else{
             String curcommit = getCurCommit();
@@ -46,7 +42,7 @@ public class Branch {
         }
     }
     
-    //回滚
+    //回滚，在当前分支回滚，Branch指向前一个Commit，并恢复文件
     public static void resetBranch(String branch) throws Exception{
         if (!BranchExists(branch)){
             System.out.println("Branch doesn't exists");
@@ -69,7 +65,7 @@ public class Branch {
     }
     
     
-    //判断HEAD文件是否存在，存在则返回true，不存在返回false
+    //判断名为name的分支是否存在
     public static boolean BranchExists(String name){
         File file = new File(savingPath + name);
         if (!file.exists()){
@@ -80,12 +76,12 @@ public class Branch {
         }
     }
     
-    //返回某分支储存commit
+    //返回当前Branch储存的commit的哈希值
     public static String getBranchCommit(String branch) throws Exception{
         return Blob.getBlobFileValue(branch);
     }
     
-    //返回当前所在commit
+    //返回当前HEAD指向commit
     public static String getCurCommit() throws Exception{
         String branch = HEAD.getCurBranch();
         String commit = getBranchCommit(branch);
