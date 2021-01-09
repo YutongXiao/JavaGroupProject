@@ -19,7 +19,11 @@ public class CommandLine {
                         break;
 
                     case "commit":
-                        gitCommit(args[2]);
+                        gitCommit();
+                        break;
+
+                    case "branch":
+                        gitBranch(args[2]);
                         break;
 
                     case "checkout":
@@ -36,7 +40,7 @@ public class CommandLine {
                         break;
 
                     default:
-                        System.out.println("invalid input2");
+                        System.out.println("invalid input");
                 }
             }
         }
@@ -48,8 +52,12 @@ public class CommandLine {
     }
 
     //用git commit "description"（暂时无用) 在当前分支上创建新的commit
-    public static void gitCommit(String description) throws Exception {
-        Commit.compareRoots("C:\\Users\\annay\\Desktop\\Java小组项目\\HashTest\\");
+    public static void gitCommit() throws Exception {
+        Commit.compareRoots("请将此变量修改为源文件夹（根目录）路径");
+    }
+
+    public static void gitBranch(String branchName) throws Exception {
+        Branch newBranch = new Branch(branchName);
     }
 
     //用git checkout "branchName"切换到branchName的分支
@@ -57,7 +65,7 @@ public class CommandLine {
         Branch.checkoutBranch(branchName);
     }
 
-    //用git reset (40位)hash 回滚至历史中某个指定commit
+    //用git reset (任何位)hash 回滚至历史中某个指定commit
     public static void gitReset(String hash) throws Exception {
         Logs.CheckoutCommit(hash);
     }

@@ -5,8 +5,7 @@ Branch类：
 1、String Name：分支名
 2、String commit：当前指向commit的哈希
 方法：
-1、构造方法：Branch(String Name):
-生成名为Name的文件，获取当前分支指向commit写入文件
+1、 构造方法：Branch(String Name): 生成名为Name的文件，获取当前分支指向commit写入文件
 2、getBranchName()：返回当前分支名
 3、updateBranch(String branch,String commit):更新branch文件中储存的commit的哈希值
 4、getBranchCommit():返回当前Branch储存的commit的哈希值
@@ -24,37 +23,61 @@ Logs类：
 1、Logs()：logs构造方法
 2、Writelogs(String commit,String branch) :保存每次commit哈希及所在分支
 3、Checklogs()：打印全部logs
-4、CheckoutCommit(String commit)：根据打印出来的commit历史，复制其中一个commit，切换到该commit，并同时切换到该commit所在分支
-
-
+4、CheckoutCommit(String commit)：根据打印出来的commit历史，复制其中一个commit（或用某一次commit哈希前几位），切换到该commit进行根目录重写，并同时更新HEAD文件切换到该commit所在分支
 
 SetTree类：
+数据域：
+1. savingPath：所有键值对文件存放的路径
+
+方法：
+	1、 CommitGetTree(String Commit)：从commit中提取根目录的tree
+	2、 TreeGetContent(String Filekey)：获取传入目录的内容中的blob和tree信息
+	3、 WriteBlob(String FileName, String Mother, String FileKey)：通过原文件名、写入路径和文件对应键值文件写回文件。
+	4、 WriteTree(String Mother, ArrayList<String> TreeContent)：同上，写回文件夹。
+	5、 ResetCommit(String Mother, String Commit): 传入路径和commit，调用上述方法重写Commit到路径。
 
 
+SetTree类逻辑解释：
+文件结构重建是根据之前 Key-Value 文件的写法，进行逆向操作，由各个 Tree 和 Blob 的 Key-Value 信息重建文件结构。
 
+Key-Value 实现：
+在对工作目录备份的时候，对目录和文件分别建立键值对结构：
+文件的类型为 Blob 。其value是文件数据，写入Key-Value文件实体；其key 为文件 value 的hash码，作为Key-Value文件实体的文件名。
+目录的类型为 Tree 。其value是目录中包含元素的信息，写入Key-Value文件实体。每一行是一个元素的信息，用字符串类型存储分为三个部分的元素信息，中间用制表符隔开，三个部分分别为类型、key、名称。其key是文件信息的hash码，作为Key-Value目录实体的文件名。
 
+Tree value 结构：
+Tree cfa909951859c56374c8a95f4d6fbc79a5870f53 AAA
+Blob dd77340349f8fccba4861d4a9b58867134151040 aaa.png
+Blob 1517d2a598f01409591dfde385012af59682dc56 bb.txt
+Blob 0fa96ebc2de6047999e21b1f74a00351611ade87 cccc.txt
+
+逆向 Key-Value 实现：
+从根目录开始，读取其Key-Value结构的value。并为每行建立不同的对象，每个对象根据每行的三个部分，确定要重写的类型、数据来源、名称。写入的位置由根目录决定。文件类型直接读写文件，目录类型递归调用重写的方法，路径随递归层数累加。
 
 
 CommandLine类：
 在命令行中：
 1、首先输入javac CommandLine.java实现对CommandLine文件的编译
-2、	输入java CommandLine XXX 通过main函数参数String[] args 实现命令交互
-3、	XXX主要为三个命令
-	git commit "description" 解析args[0]是否为git arg[1]为commit则调用gitCommit(args[2])
-	git checkout branchname 解析args[0]是否为git arg[1]为checkout则调用gitCheckout(args[2])
-	git reset 哈希码 解析args[0]是否为git arg[1]为reset则调用gitReset(args[2])
+2、 输入java CommandLine XXX 通过main函数参数String[] args 实现命令交互
+3、	XXX主要为五个命令
+● git commit 实现创建新commit
+● git branch "branchname" 实现创建新分支
+● git checkout “branchname“ 实现切换分支
+● git log 展示已提交所有分支
+● git reset / git reset 哈希码 	在当前分支上回滚一次或回滚到有所输哈希码的固定分支
 
 方法：
 1、main(String[] args)：读取用户在命令行的输入
-	判断长度 可接受长度为3或2
-	分段取词，第一词为git继续读取，非git输出“非法输入”
-	按第二词调用函数,并将第三词（若有）作为参数传入
+● 判断长度 可接受长度为3或2
+● 分段取词，第一词为git继续读取，非git输出“非法输入”
+● 按第二词调用函数,并将第三词（若有）作为参数传入
 
 2、gitCommit(String description)：将当前HEAD指向branch并更新一个Commit，调用commit中compareRoot方法，description参数暂时无用。
 
-3、gitCheckout(String branchName)：运用HEAD类中checkoutBranch()方法，在branch文件中找到为参数名的branch，并将HEAD指向它。若无此branch则以参数名为名新建一个branch对象，更新HEAD指针到此对象，返回“At branchName”
+3、gitBranch(String branchName)：调用Branch类构造函数创造一个以branchName为名的新分支。
 
-4、gitReset(String hash)：用户输入5-40位的特定commit哈希码，系统通过回滚方法resetCommit()恢复指定commit的文件内容，返回“At 'commit hash'”
+4、gitCheckout(String branchName)：运用HEAD类中checkoutBranch()方法，在branch文件中找到为参数名的branch，并将HEAD指向它。
 
 5、gitLog()：返回所有的commit历史或当前分支commit历史，每个commit包括哈希+commit分支
 
+6、gitReset() / gitReset(String hash)：用户输入5-40位的特定commit哈希码，系统通过回滚方法resetCommit()恢复指定commit的文件内容。若没有传入哈希值，则在当前分支上回滚一个commit。

@@ -31,7 +31,8 @@ public class Commit {
         Branch.updateBranch(branch, key);
         Logs.Writelogs(key, branch);
     }
-    
+
+    //传入根目录路径，建立commit的key-value文件，内容第一行为根目录类型和哈希，第二行为前一commit的类型Parent和哈希，无则为null。返回建立文件的文件名key。
     public static String setCommitKeyValue(String path) throws Exception{
         String CommitString = "";
         CommitString += "Tree" + " " + Tree.setTreeKeyValue(path) + "\n"; //加根目录类型和哈希
@@ -39,7 +40,8 @@ public class Commit {
         
         return KeyValue.setStringKeyValue(CommitString);
     }
-    
+
+    //传commit key返回内容，用于初始化数据域value。
     public static String getCommitFileValue(String key) throws Exception{
         File file = new File(KeyValue.savingPath + key);
         if(!file.exists()) {

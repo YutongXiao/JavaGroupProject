@@ -8,7 +8,7 @@ import java.io.FileOutputStream;
 public class KeyValue {
     String key;
     //保存路径变量，需要初始化此变量，否则会产生null+哈希码的情况
-    public static String savingPath = "C:\\Users\\annay\\Desktop\\Java小组项目\\Blobs\\";
+    public static String savingPath = "请将此变量修改为键值对文件及其他指针文件的保存路径";
 
     //无参构造方法，空
     KeyValue() {
@@ -135,28 +135,5 @@ public class KeyValue {
         //返回SHA1哈希值
         return complete.digest();
     }
-
-    
-//测试方法
-//public static void main(String[] args) throws Exception{
-//        //Blob blob = new Blob();
-//        //System.out.print(blob.getStringValue("57b22291db30c440217479b23801561cace9ef"));
-//        File file = new File("/Users/jiapeitong/Desktop/未命名文件夹 2/logs");
-//        String logsString;
-//        if(!file.exists()){
-//            System.out.println("File doesn't exists");
-//        }else{
-//            Scanner scan = new Scanner(file);
-//            StringBuffer stringbuffer = new StringBuffer();
-//            while (scan.hasNext()){
-//                stringbuffer.append(scan.next()).append("\n");
-//            }
-//            scan.close();
-//            logsString = stringbuffer.toString().trim();
-//            System.out.println(logsString);
-//        }
-//
-//
-//    }
 }
 

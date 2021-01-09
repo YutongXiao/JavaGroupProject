@@ -2,22 +2,23 @@
 包括Commit类和HEAD类
 Commit类：
 数据域：
-1、	key：Commit对象生成文件的文件名
-2、	value：Commit对象生成文件的内容
-3、	root：Commit下对应的根目录
-4、	parent：Commit对象前一个commit对象
+1、 key：Commit对象生成文件的文件名
+2、 value：Commit对象生成文件的内容
+3、 root：Commit下对应的根目录
+4、 parent：Commit对象前一个commit对象
 
 方法：
-1、	Commit(String path)：构造方法，key,value,root,parent的初始化。若HEAD不存在，创建HEAD并且创建Branch main指向当前commit，否则将当前branch指向此新建commit。
-2、	setCommitKeyValue(String path)：传入根目录路径，建立commit的key-value文件，内容第一行为根目录类型和哈希，第二行为前一commit的类型Parent和哈希，无则为null。返回建立文件的文件名key。
-3、	getCommitFileValue(String key)：传commit key返回内容，用于初始化数据域value。
-4、	compareRoot(String path)：传入路径，对比路径根目录哈希与当前commit哈希是否相同，不同则新建一个commit。用于CommandLine类中git commit XXX的交互。
+1、 Commit(String path)：构造方法，key,value,root,parent的初始化。若HEAD不存在，创建HEAD并且创建Branch main指向当前commit，否则将当前branch指向此新建commit。
+2、 setCommitKeyValue(String path)：传入根目录路径，建立commit的key-value文件，内容第一行为根目录类型和哈希，第二行为前一commit的类型Parent和哈希，无则为null。返回建立文件的文件名key。
+3、 getCommitFileValue(String key)：传commit key返回内容，用于初始化数据域value。
+4、 compareRoot(String path)：传入路径，对比路径根目录哈希与当前commit哈希是否相同，不同则新建一个commit。用于CommandLine类中git commit XXX的交互。
 
 HEAD类：
 数据域：
-1、	savingPath：创造key-value文件要保存的路径
+1、 savingPath：创造key-value文件要保存的路径
 
 方法：
-1、	HEAD(String branch)：构造方法，传入一个branch的名字，（创建HEAD文件或直接）打开HEAD文件，将指向branch名放入内。
-2、	getCurBranch()：返回HEAD指向的当前branch
-3、	HEADExists()：返回布尔值，判断HEAD文件是否已存在，为构造方法调用。
+1、 HEAD(String branch)：构造方法，传入一个branch的名字，（创建HEAD文件或直接）打开HEAD文件，将指向branch名放入内。（HEAD不存在则创建HEAD文件，HEAD文件已存在则更新指向分支）
+2、 getCurBranch()：返回HEAD指向的当前branch
+3、 HEADExists()：返回布尔值，判断HEAD文件是否已存在，为构造方法调用。
+

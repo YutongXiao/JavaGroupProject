@@ -3,11 +3,10 @@ import java.util.Scanner;
 
 public class Tree {
     //数据域
-    String key ;
-    String value ;
-    String type;
+    String key ; //传入目录的key
+    String value ; //传入目录的value
 
-    //方法
+    //空构造方法
     Tree(){
     }
 
@@ -15,10 +14,9 @@ public class Tree {
     Tree(String path) throws Exception {
         key = setTreeKeyValue(path);
         value = getTreeFileValue(key);
-        type = "Tree";
     }
     
-    //dfs方法为每个文件、文件夹建立 key-value，
+    //深度优先遍历，为每个文件和文件夹建立key-value文件，并返回整个文件目录的key，用于构造方法中key的赋值
     public static String setTreeKeyValue(String path) throws Exception{
         String DirectoryString = "";
         // 该字符串中存储文件夹下 files 结构
@@ -40,7 +38,8 @@ public class Tree {
         }          
         return KeyValue.setStringKeyValue(DirectoryString);                          
     } 
-    
+
+    //传入一个目录的哈希key，返回其key-value文件中的内容，用于构造方法中value的赋值
     public static String getTreeFileValue(String key) throws Exception{
         File file = new File(KeyValue.savingPath + key);
         if(!file.exists()){
@@ -58,15 +57,5 @@ public class Tree {
             scan.close();
             return stringbuffer.toString();
         }
-    }
-
-
-    
-    //测试方法
-    public static void main (String[] args) throws Exception{
-         
-        Tree tree = new Tree("C:\\Users\\annay\\Desktop\\Java小组项目\\HashTest");
-        System.out.println(tree.value);
-        System.out.println("Root: " + tree.key);
     }
 }
