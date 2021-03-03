@@ -1,5 +1,5 @@
 # JavaGroupProject: Git Version Control Tool
-Java group project for Java Programming Design course
+Java group project for Java Programming Design course  
 Group members include:  
 1. [@YutongXiao](https://github.com/YutongXiao)
 2. [@brycejpt](https://github.com/brycejpt)
